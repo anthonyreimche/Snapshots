@@ -1,0 +1,24 @@
+{
+  "id": "snapshots",
+  "name": "Snapshots",
+  "version": "1.0.0",
+  "description": "Keep named snapshots of a photo's edit, to put back, preview or compare with the edit shown.",
+  "author": "Anthony Reimche",
+  "main": "dist/index.js",
+  "license": "GPL-3.0-only",
+  "categories": [
+    "workflow"
+  ],
+  "keywords": [
+    "snapshots",
+    "history",
+    "versions",
+    "compare",
+    "edit"
+  ],
+  "repository": "anthonyreimche/Snapshots",
+  "worksWith": [
+    "anthonyreimche/Develop"
+  ],
+  "minAppVersion": "3.2.6"
+}
