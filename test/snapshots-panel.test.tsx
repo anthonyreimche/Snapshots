@@ -114,6 +114,20 @@ describe("taking a snapshot", () => {
   });
 });
 
+describe("row actions", () => {
+  it("are the app's quiet small buttons", async () => {
+    const rig = fakeApi();
+    store(rig, "photo-1", [WARM]);
+    await mount(rig);
+    for (const name of ["Rename “Warm”", "Delete “Warm”"]) {
+      const button = screen.getByRole("button", { name });
+      expect(button.dataset.kit).toBe("button");
+      expect(button.dataset.variant).toBe("ghost");
+      expect(button.dataset.size).toBe("sm");
+    }
+  });
+});
+
 describe("putting a snapshot back", () => {
   it("restores its edit as one step named after it", async () => {
     const rig = fakeApi();

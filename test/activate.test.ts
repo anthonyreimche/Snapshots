@@ -18,6 +18,7 @@ describe("activate", () => {
         title: "Snapshots",
         component: SnapshotsPanel,
         defaultDock: { module: "develop", direction: "left", order: 4, width: 240, height: 200 },
+        modules: ["develop"],
       },
     ]);
     expect(PANEL_ID).toBe("snapshots.panel");

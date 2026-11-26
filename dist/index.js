@@ -131,7 +131,7 @@ function te(e) {
 	} catch {
 		return null;
 	}
-	return !C(t) || t.format !== v || !Array.isArray(t.snapshots) ? null : t.snapshots.filter(ne);
+	return !C(t) || t.format !== v || !Array.isArray(t.snapshots) ? null : t.snapshots.filter(w);
 }
 function S(e, t, n) {
 	let r = { ...e.paramBag };
@@ -145,12 +145,12 @@ function S(e, t, n) {
 function C(e) {
 	return typeof e == "object" && !!e && !Array.isArray(e);
 }
-function ne(e) {
+function w(e) {
 	return C(e) && typeof e.id == "string" && typeof e.name == "string" && Number.isFinite(e.taken) && C(e.params) && C(e.paramBag);
 }
 //#endregion
 //#region src/store.ts
-var w = {
+var ne = {
 	photoId: null,
 	snapshots: [],
 	status: "idle",
@@ -162,12 +162,12 @@ function D() {
 	if (!T) throw Error("[snapshots] store used before activate()");
 	return T;
 }
-function re() {
-	T = h.stores.create()(() => ({ ...w }));
+function O() {
+	T = h.stores.create()(() => ({ ...ne }));
 	let t = h.stores.useDevelopStore;
-	O(t.getState().photoId);
+	k(t.getState().photoId);
 	let n = t.subscribe((e, t) => {
-		e.photoId !== t.photoId && O(e.photoId);
+		e.photoId !== t.photoId && k(e.photoId);
 	}), r = h.variables.subscribe(e, (e) => {
 		D().setState({
 			canCompare: !0,
@@ -178,7 +178,7 @@ function re() {
 		n(), r(), F(null), L();
 	};
 }
-function O(e) {
+function k(e) {
 	L();
 	let t = D();
 	t.setState({
@@ -197,37 +197,37 @@ function O(e) {
 		t.getState().photoId === e && t.setState({ status: "unreadable" });
 	});
 }
-function k(e) {
+function A(e) {
 	let t = D(), { photoId: n, status: r } = t.getState();
 	return r !== "ready" || !n || h.stores.useDevelopStore.getState().photoId !== n ? !1 : (t.setState({ snapshots: e }), h.develop.putPhotoData(_, e.length > 0 ? ee(e) : null), !0);
 }
-var A = (e) => D().getState().snapshots.find((t) => t.id === e);
-function j() {
+var j = (e) => D().getState().snapshots.find((t) => t.id === e);
+function M() {
 	let { params: e, paramBag: t, editError: n } = h.stores.useDevelopStore.getState();
 	if (n) return;
 	let { snapshots: r } = D().getState();
-	k([...r, b({
+	A([...r, b({
 		params: e,
 		paramBag: t
 	}, x(r), crypto.randomUUID(), Date.now())]);
 }
-function M(e, t) {
-	let n = t.trim(), r = A(e);
+function N(e, t) {
+	let n = t.trim(), r = j(e);
 	if (!r || !n || n === r.name) return;
 	let i = {
 		...r,
 		name: n
 	};
-	k(D().getState().snapshots.map((t) => t.id === e ? i : t)) && I(e, (e) => ({
+	A(D().getState().snapshots.map((t) => t.id === e ? i : t)) && I(e, (e) => ({
 		...e,
 		label: n
 	}));
 }
-function N(e) {
-	k(D().getState().snapshots.filter((t) => t.id !== e)) && (D().getState().previewing === e && F(null), I(e, () => null), E?.id === e && (E = null));
-}
 function P(e) {
-	let t = A(e);
+	A(D().getState().snapshots.filter((t) => t.id !== e)) && (D().getState().previewing === e && F(null), I(e, () => null), E?.id === e && (E = null));
+}
+function re(e) {
+	let t = j(e);
 	if (!t) return Promise.resolve();
 	D().setState({ previewing: null });
 	let { params: n, paramBag: r } = t;
@@ -237,7 +237,7 @@ function P(e) {
 	}, `Snapshot “${t.name}”`);
 }
 function F(e) {
-	let t = D(), n = h.stores.useDevelopStore.getState(), r = e === null ? void 0 : A(e);
+	let t = D(), n = h.stores.useDevelopStore.getState(), r = e === null ? void 0 : j(e);
 	if (r) t.setState({ previewing: r.id }), n.setPreviewParams(r.params, S(r, n.paramBag, (e) => h.params.get(e)));
 	else {
 		if (t.getState().previewing === null) return;
@@ -245,7 +245,7 @@ function F(e) {
 	}
 }
 function ie(e) {
-	let n = A(e), { photoId: r } = D().getState();
+	let n = j(e), { photoId: r } = D().getState();
 	if (!n || !r) return;
 	let i = !1;
 	h.variables.update("compare.reference", (a) => {
@@ -272,42 +272,35 @@ function L() {
 	let n = E;
 	n && (E = null, h.variables.update(e, (e) => t(e, n.photoId) === n.id ? null : e));
 }
-function R() {
-	let e = new URLSearchParams(window.location.search).get("detached");
-	return h.stores.useUIStore.getState().activeModule === "develop" || e === "develop";
-}
 //#endregion
 //#region src/SnapshotsPanel.tsx
-var z = "snapshots-panel-list", B = "snapshots-panel-item", V = "snapshots-panel-row", H = "snapshots-panel-label", U = "snapshots-panel-detail", W = "snapshots-panel-action", G = "snapshots-panel-note";
-function K(e) {
+var R = "snapshots-panel-list", z = "snapshots-panel-item", B = "snapshots-panel-row", V = "snapshots-panel-label", H = "snapshots-panel-detail", U = "snapshots-panel-action", W = "snapshots-panel-note";
+function G(e) {
 	return `
 :where(.snapshots-panel) { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.25rem; }
-:where(.${z}) { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; max-height: 20rem; overflow-y: auto; }
-:where(.${B}) { display: flex; align-items: center; gap: 1px; border-radius: 0.25rem; }
-:where(.${B}:hover), :where(.${B}:focus-within) { background-color: ${e.surface3}; }
-:where(.${V}) { display: flex; flex: 1; min-width: 0; align-items: baseline; gap: 0.5rem; border-radius: 0.25rem; padding: 0.25rem 0.5rem; background-color: transparent; font-size: 11px; text-align: left; color: ${e.textSecondary}; cursor: pointer; touch-action: none; }
-:where(.${B}:hover .${V}) { color: ${e.textPrimary}; }
-:where(.${V}[aria-current="true"]) { color: ${e.textPrimary}; box-shadow: inset 2px 0 0 ${e.accent}; }
-:where(.${V}[data-previewing]) { color: ${e.textPrimary}; background-color: ${e.surface3}; }
-:where(.${H}) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-:where(.${U}) { flex: none; color: ${e.textMuted}; font-variant-numeric: tabular-nums; }
-:where(.${W}) { flex: none; width: 1.25rem; height: 1.25rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 0.25rem; background-color: transparent; font-size: 11px; line-height: 1; color: ${e.textMuted}; cursor: pointer; }
-:where(.${W}:hover) { color: ${e.textPrimary}; }
-:where(.${W}[aria-pressed="true"]) { color: ${e.accent}; }
-@media (hover: hover) { :where(.${B}:not(:hover):not(:focus-within) .${W}:not([aria-pressed="true"])) { opacity: 0; } }
-:where(.${G}) { padding: 0.25rem 0.5rem; font-size: 11px; color: ${e.textMuted}; }
-html.sl-larger-text .${V}, html.sl-larger-text .${G}, html.sl-larger-text .${W} { font-size: 13px !important; line-height: 1.45 !important; }
+:where(.${R}) { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; max-height: 20rem; overflow-y: auto; }
+:where(.${z}) { display: flex; align-items: center; gap: 1px; border-radius: 0.25rem; }
+:where(.${z}:hover), :where(.${z}:focus-within) { background-color: ${e.surface3}; }
+:where(.${B}) { display: flex; flex: 1; min-width: 0; align-items: baseline; gap: 0.5rem; border-radius: 0.25rem; padding: 0.25rem 0.5rem; background-color: transparent; font-size: 11px; text-align: left; color: ${e.textSecondary}; cursor: pointer; touch-action: none; }
+:where(.${z}:hover .${B}) { color: ${e.textPrimary}; }
+:where(.${B}[aria-current="true"]) { color: ${e.textPrimary}; box-shadow: inset 2px 0 0 ${e.accent}; }
+:where(.${B}[data-previewing]) { color: ${e.textPrimary}; background-color: ${e.surface3}; }
+:where(.${V}) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:where(.${H}) { flex: none; color: ${e.textMuted}; font-variant-numeric: tabular-nums; }
+@media (hover: hover) { :where(.${z}:not(:hover):not(:focus-within) .${U}:not([aria-pressed="true"])) { opacity: 0; } }
+:where(.${W}) { padding: 0.25rem 0.5rem; font-size: 11px; color: ${e.textMuted}; }
+html.sl-larger-text .${B}, html.sl-larger-text .${W} { font-size: 13px !important; line-height: 1.45 !important; }
 `;
 }
-var q = new Intl.DateTimeFormat(void 0, {
+var K = new Intl.DateTimeFormat(void 0, {
 	dateStyle: "medium",
 	timeStyle: "short"
 });
-function J() {
+function q() {
 	let e = D(), r = e((e) => e.snapshots), i = e((e) => e.status), a = e((e) => e.photoId), o = e((e) => e.canCompare), s = e((e) => t(e.reference, e.photoId)), c = e((e) => e.previewing), l = h.stores.useDevelopStore, u = l((e) => e.params), d = l((e) => e.paramBag), g = l((e) => e.editError), [_, v] = m.useState(null);
-	if (g) return /* @__PURE__ */ m.createElement("div", { className: G }, "This photo's edit couldn't be read.");
-	if (!a) return /* @__PURE__ */ m.createElement("div", { className: G }, "No photo open");
-	if (i === "unreadable") return /* @__PURE__ */ m.createElement("div", { className: G }, "This photo's snapshots couldn't be read. Snapshots kept by a newer version of Snapshots need that version.");
+	if (g) return /* @__PURE__ */ m.createElement("div", { className: W }, "This photo's edit couldn't be read.");
+	if (!a) return /* @__PURE__ */ m.createElement("div", { className: W }, "No photo open");
+	if (i === "unreadable") return /* @__PURE__ */ m.createElement("div", { className: W }, "This photo's snapshots couldn't be read. Snapshots kept by a newer version of Snapshots need that version.");
 	let y = {
 		params: u,
 		paramBag: d
@@ -317,7 +310,7 @@ function J() {
 		variant: "secondary",
 		full: !0,
 		disabled: i !== "ready",
-		onClick: j,
+		onClick: M,
 		title: "Keep the edit shown as a snapshot"
 	}, "+ Snapshot"), i === "ready" && r.length === 0 && /* @__PURE__ */ m.createElement("div", { className: "snapshots-panel-note" }, "No snapshots yet. Take one to come back to this edit later."), r.length > 0 && /* @__PURE__ */ m.createElement("ol", {
 		className: "snapshots-panel-list",
@@ -327,41 +320,48 @@ function J() {
 		return /* @__PURE__ */ m.createElement("li", {
 			key: e.id,
 			className: "snapshots-panel-item"
-		}, _ === e.id ? /* @__PURE__ */ m.createElement(oe, {
+		}, _ === e.id ? /* @__PURE__ */ m.createElement(ae, {
 			snapshot: e,
 			onDone: () => v(null)
-		}) : /* @__PURE__ */ m.createElement(ae, {
+		}) : /* @__PURE__ */ m.createElement(J, {
 			snapshot: e,
 			current: t.length === 0,
 			previewing: c === e.id,
 			detail: f(t),
-			title: p(q.format(e.taken), t, b),
+			title: p(K.format(e.taken), t, b),
 			onRename: () => v(e.id)
-		}), o && /* @__PURE__ */ m.createElement("button", {
+		}), o && /* @__PURE__ */ m.createElement(x, {
+			variant: "ghost",
+			size: "sm",
 			className: "snapshots-panel-action",
+			active: s === e.id,
 			"aria-pressed": s === e.id,
 			"aria-label": `Compare with “${e.name}”`,
 			title: "Compare the edit shown with this snapshot",
 			onClick: () => ie(e.id)
-		}, "⇆"), /* @__PURE__ */ m.createElement("button", {
+		}, "⇆"), /* @__PURE__ */ m.createElement(x, {
+			variant: "ghost",
+			size: "sm",
 			className: "snapshots-panel-action",
 			"aria-label": `Rename “${e.name}”`,
 			title: "Rename",
 			onClick: () => v(e.id)
-		}, "✎"), /* @__PURE__ */ m.createElement("button", {
+		}, "✎"), /* @__PURE__ */ m.createElement(x, {
+			variant: "ghost",
+			size: "sm",
 			className: "snapshots-panel-action",
 			"aria-label": `Delete “${e.name}”`,
 			title: "Delete",
-			onClick: () => N(e.id)
+			onClick: () => P(e.id)
 		}, "✕"));
 	})));
 }
-function ae({ snapshot: e, current: t, previewing: n, detail: r, title: i, onRename: a }) {
+function J({ snapshot: e, current: t, previewing: n, detail: r, title: i, onRename: a }) {
 	let o = m.useRef(null), s = m.useRef(!1), c = () => {
 		o.current !== null && clearTimeout(o.current), o.current = null, s.current && F(null);
 	};
 	return m.useEffect(() => c, []), /* @__PURE__ */ m.createElement("button", {
-		className: V,
+		className: B,
 		"aria-current": t ? "true" : void 0,
 		"data-previewing": n ? "" : void 0,
 		title: i,
@@ -374,17 +374,17 @@ function ae({ snapshot: e, current: t, previewing: n, detail: r, title: i, onRen
 		onPointerCancel: c,
 		onPointerLeave: c,
 		onClick: () => {
-			s.current ? s.current = !1 : P(e.id);
+			s.current ? s.current = !1 : re(e.id);
 		},
 		onDoubleClick: a,
 		onKeyDown: (e) => {
 			e.key === "F2" && (e.preventDefault(), a());
 		}
-	}, /* @__PURE__ */ m.createElement("span", { className: H }, e.name), /* @__PURE__ */ m.createElement("span", { className: U }, r));
+	}, /* @__PURE__ */ m.createElement("span", { className: V }, e.name), /* @__PURE__ */ m.createElement("span", { className: H }, r));
 }
-function oe({ snapshot: e, onDone: t }) {
+function ae({ snapshot: e, onDone: t }) {
 	let [n, r] = m.useState(e.name), i = m.useRef(!1), a = (r) => {
-		i.current || (i.current = !0, r && M(e.id, n), t());
+		i.current || (i.current = !0, r && N(e.id, n), t());
 	};
 	m.useEffect(() => h.ui.onEscape(() => a(!1)), []);
 	let { TextInput: o } = h.ui;
@@ -407,35 +407,36 @@ function oe({ snapshot: e, onDone: t }) {
 //#endregion
 //#region src/index.tsx
 var Y = "snapshots", X = `${Y}.panel`, Z = `${Y}.styles`, Q = `${Y}.take`, $ = null;
-function se(e) {
-	g(e), $ = re(), e.registerStylesheet({
+function oe(e) {
+	g(e), $ = O(), e.registerStylesheet({
 		id: Z,
-		css: K(e.ui.tokens)
+		css: G(e.ui.tokens)
 	}), e.registerPanel({
 		id: X,
 		title: "Snapshots",
-		component: J,
+		component: q,
 		defaultDock: {
 			module: "develop",
 			direction: "left",
 			order: 4,
 			width: 240,
 			height: 200
-		}
+		},
+		modules: ["develop"]
 	}), e.registerKeybinding({
 		id: Q,
 		label: "Take snapshot",
 		category: "Develop",
 		defaultCombo: "Ctrl+N",
 		handler: () => {
-			R() && j();
+			e.navigation.current() === "develop" && M();
 		}
 	});
 }
-function ce() {
+function se() {
 	$?.(), $ = null;
 }
 //#endregion
-export { Y as EXTENSION_ID, X as PANEL_ID, Z as STYLESHEET_ID, Q as TAKE_ACTION, se as activate, ce as deactivate };
+export { Y as EXTENSION_ID, X as PANEL_ID, Z as STYLESHEET_ID, Q as TAKE_ACTION, oe as activate, se as deactivate };
 
 //# sourceMappingURL=index.js.map

@@ -182,8 +182,3 @@ function clearOwnReference(): void {
   );
 }
 
-/** Develop is the module shown, in the main window or its own. */
-export function inDevelop(): boolean {
-  const detached = new URLSearchParams(window.location.search).get("detached");
-  return api.stores.useUIStore.getState().activeModule === "develop" || detached === "develop";
-}

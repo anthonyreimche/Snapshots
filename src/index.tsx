@@ -9,7 +9,7 @@
 import { SnapshotsPanel, snapshotsCss } from "./SnapshotsPanel";
 import { initRuntime } from "./rt";
 import type { SafelightAPI } from "./safelight";
-import { inDevelop, startSnapshots, take } from "./store";
+import { startSnapshots, take } from "./store";
 
 export const EXTENSION_ID = "snapshots";
 export const PANEL_ID = `${EXTENSION_ID}.panel`;
@@ -27,6 +27,7 @@ export function activate(host: SafelightAPI): void {
     title: "Snapshots",
     component: SnapshotsPanel,
     defaultDock: { module: "develop", direction: "left", order: 4, width: 240, height: 200 },
+    modules: ["develop"],
   });
   host.registerKeybinding({
     id: TAKE_ACTION,
@@ -34,7 +35,7 @@ export function activate(host: SafelightAPI): void {
     category: "Develop",
     defaultCombo: "Ctrl+N",
     handler: () => {
-      if (inDevelop()) take();
+      if (host.navigation.current() === "develop") take();
     },
   });
 }

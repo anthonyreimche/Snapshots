@@ -1,7 +1,7 @@
 {
   "id": "snapshots",
   "name": "Snapshots",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Keep named snapshots of a photo's edit, to put back, preview or compare with the edit shown.",
   "author": "Anthony Reimche",
   "main": "dist/index.js",
@@ -20,5 +20,5 @@
   "worksWith": [
     "anthonyreimche/Develop"
   ],
-  "minAppVersion": "3.2.6"
+  "minAppVersion": "3.2.8"
 }

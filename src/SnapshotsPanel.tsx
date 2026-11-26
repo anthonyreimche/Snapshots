@@ -42,12 +42,9 @@ export function snapshotsCss(t: UiTokens): string {
 :where(.${ROW_CLASS}[data-previewing]) { color: ${t.textPrimary}; background-color: ${t.surface3}; }
 :where(.${LABEL_CLASS}) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 :where(.${DETAIL_CLASS}) { flex: none; color: ${t.textMuted}; font-variant-numeric: tabular-nums; }
-:where(.${ACTION_CLASS}) { flex: none; width: 1.25rem; height: 1.25rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 0.25rem; background-color: transparent; font-size: 11px; line-height: 1; color: ${t.textMuted}; cursor: pointer; }
-:where(.${ACTION_CLASS}:hover) { color: ${t.textPrimary}; }
-:where(.${ACTION_CLASS}[aria-pressed="true"]) { color: ${t.accent}; }
 @media (hover: hover) { :where(.${ITEM_CLASS}:not(:hover):not(:focus-within) .${ACTION_CLASS}:not([aria-pressed="true"])) { opacity: 0; } }
 :where(.${NOTE_CLASS}) { padding: 0.25rem 0.5rem; font-size: 11px; color: ${t.textMuted}; }
-html.sl-larger-text .${ROW_CLASS}, html.sl-larger-text .${NOTE_CLASS}, html.sl-larger-text .${ACTION_CLASS} { font-size: 13px !important; line-height: 1.45 !important; }
+html.sl-larger-text .${ROW_CLASS}, html.sl-larger-text .${NOTE_CLASS} { font-size: 13px !important; line-height: 1.45 !important; }
 `;
 }
 
@@ -107,32 +104,39 @@ export function SnapshotsPanel() {
                   />
                 )}
                 {canCompare && (
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className={ACTION_CLASS}
+                    active={compared === snapshot.id}
                     aria-pressed={compared === snapshot.id}
                     aria-label={`Compare with “${snapshot.name}”`}
                     title="Compare the edit shown with this snapshot"
                     onClick={() => toggleCompare(snapshot.id)}
                   >
                     ⇆
-                  </button>
+                  </Button>
                 )}
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   className={ACTION_CLASS}
                   aria-label={`Rename “${snapshot.name}”`}
                   title="Rename"
                   onClick={() => setRenaming(snapshot.id)}
                 >
                   ✎
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
                   className={ACTION_CLASS}
                   aria-label={`Delete “${snapshot.name}”`}
                   title="Delete"
                   onClick={() => remove(snapshot.id)}
                 >
                   ✕
-                </button>
+                </Button>
               </li>
             );
           })}

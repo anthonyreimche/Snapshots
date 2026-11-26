@@ -1,7 +1,7 @@
 {
   "name": "safelight-snapshots",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Snapshots extension for Safelight: named edits of a photo to put back, preview or compare.",
   "type": "module",
   "scripts": {

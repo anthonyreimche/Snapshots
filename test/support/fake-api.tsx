@@ -116,7 +116,7 @@ export function fakeApi({
     },
   };
 
-  const Button = ({ variant: _v, size: _s, active: _a, full: _f, ...rest }: ButtonProps) => <button {...rest} />;
+  const Button = ({ variant: _v, size: _s, active: _a, full: _f, ...rest }: ButtonProps) => <button data-kit="button" data-variant={_v} data-size={_s} {...rest} />;
   const TextInput = ({ value, onChange, ...rest }: TextInputProps) => (
     <input {...rest} value={value} onChange={(e) => onChange(e.currentTarget.value)} />
   );
@@ -141,7 +141,8 @@ export function fakeApi({
       },
     },
     params: { get: (key) => descriptors[key] },
-    stores: { useDevelopStore: develop, useUIStore: ui, create },
+    navigation: { current: () => ui.getState().activeModule },
+    stores: { useDevelopStore: develop, create },
     develop: {
       putPhotoData: (key, data) => {
         const id = develop.getState().photoId;

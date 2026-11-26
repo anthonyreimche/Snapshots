@@ -76,6 +76,8 @@ export interface PanelContribution {
   title: string;
   component: ComponentType;
   defaultDock?: PanelDockDefault;
+  /** The modules the panel may be docked in; omitted, every module (Safelight 3.2.8). */
+  modules?: readonly string[];
 }
 
 export interface StylesheetContribution {
@@ -99,6 +101,8 @@ export interface UiTokens {
   readonly textMuted: string;
   readonly accent: string;
 }
+
+export type ModuleId = "library" | "develop" | (string & {});
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "ghost" | "danger";
@@ -145,12 +149,16 @@ export interface SafelightAPI {
      *  the function that gives it back. */
     onEscape(handler: () => void): () => void;
   };
+  navigation: {
+    /** The module this window shows: a popped-out window's own module, else the
+     *  main window's tab. Needs Safelight 3.2.7. */
+    current(): ModuleId;
+  };
   params: {
     get(qualifiedKey: string): ParamDescriptor | undefined;
   };
   stores: {
     useDevelopStore: StoreApi<DevelopStoreState>;
-    useUIStore: StoreApi<{ activeModule: string }>;
     create: typeof import("zustand").create;
   };
   develop: {
